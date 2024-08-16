@@ -32,7 +32,6 @@ def login():
             hashed_password = hashed_password.encode('utf-8')
 
         if checkpw(password.encode('utf-8'), hashed_password):
-            tkMessageBox.showinfo("Login", "Login successful!")
             root.destroy()  # Hide the login window
             index.start_application()  # Show the main application window from index.py
         else:
