@@ -3,13 +3,15 @@ from tkinter import ttk
 import index
 import asset_record
 
+
 def load_index():
     # Clear the main content area
     for widget in main_area.winfo_children():
         widget.destroy()
-    
+
     # Load the index content into the main_area
     index.start_application(main_area)
+
 
 def load_page(page_name):
     if page_name == "Index":
@@ -25,10 +27,10 @@ def load_asset_record():
         widget.destroy()
     asset_record.start_application(main_area)
 
+
 def load_page(page_name):
     if page_name == "Asset_record":
         load_asset_record()
-
 
 
 # Create the main window
