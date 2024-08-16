@@ -4,7 +4,7 @@ import tkinter.messagebox as tkMessageBox
 from bcrypt import checkpw
 import index  # Import the index module
 
-def login():
+def login(event=None):  # Accept an event parameter for key binding
     username = username_var.get()
     password = password_var.get()
 
@@ -51,12 +51,12 @@ username_var = StringVar()
 password_var = StringVar()
 
 # Set the dimensions of the window
-root.geometry("300x200")
+root.geometry("1360x760")
 root.resizable(False, False)
 
 # Center the window on the screen
-window_width = 300
-window_height = 200
+window_width = 1360
+window_height = 760
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 x = (screen_width - window_width) / 2
@@ -79,6 +79,9 @@ password_entry = Entry(frame, textvariable=password_var, show="*", width=25, fon
 password_entry.pack(pady=5)
 
 Button(frame, text="Login", command=login, bg='#4CAF50', fg='white', font=('Arial', 12), padx=10, pady=5).pack(pady=10)
+
+# Bind the Enter key to the login function
+root.bind('<Return>', login)
 
 # Optionally, add a logo or additional styling
 # logo = PhotoImage(file="logo.png")  # Uncomment if you have a logo

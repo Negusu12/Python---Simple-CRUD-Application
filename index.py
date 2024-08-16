@@ -4,13 +4,7 @@ import tkinter.messagebox as tkMessageBox
 import tkinter.ttk as ttk
 from bcrypt import hashpw, gensalt, checkpw
 
-def start_application():
-    global root
-    root = Tk()
-    root.title("Python: Simple CRUD Application")
-    root.geometry("900x500")
-
-    # ================================== VARIABLES ==========================================
+def start_application(parent_frame):
     global FIRSTNAME, LASTNAME, GENDER, ADDRESS, USERNAME, PASSWORD
     FIRSTNAME = StringVar()
     LASTNAME = StringVar()
@@ -21,11 +15,11 @@ def start_application():
 
     # ================================== FRAME ===============================================
     global tree, txt_result
-    Top = Frame(root, width=900, height=50, bd=8, relief="raise")
+    Top = Frame(parent_frame, width=1360, height=50, bd=8, relief="raise")
     Top.pack(side=TOP)
-    Left = Frame(root, width=300, height=500, bd=8, relief="raise")
+    Left = Frame(parent_frame, width=300, height=500, bd=8, relief="raise")
     Left.pack(side=LEFT)
-    Right = Frame(root, width=600, height=500, bd=8, relief="raise")
+    Right = Frame(parent_frame, width=760, height=500, bd=8, relief="raise")
     Right.pack(side=RIGHT)
     Forms = Frame(Left, width=300, height=450)
     Forms.pack(side=TOP)
@@ -35,7 +29,7 @@ def start_application():
     Male = Radiobutton(RadioGroup, text="Male", variable=GENDER, value="Male", font=('arial', 16)).pack(side=LEFT)
     Female = Radiobutton(RadioGroup, text="Female", variable=GENDER, value="Female", font=('arial', 16)).pack(side=LEFT)
 
-    # ================================== LABEL WIDGET ========================================
+     # ================================== LABEL WIDGET ========================================
     txt_title = Label(Top, width=900, font=('arial', 24), text="Python: Simple CRUD Application")
     txt_title.pack()
     txt_firstname = Label(Forms, text="Firstname:", font=('arial', 16), bd=15)
@@ -108,6 +102,8 @@ def start_application():
     # ================================== INITIALIZATION ======================================
     Read()  # Initial read to populate the table
     root.mainloop()
+
+# ============================= CRUD FUNCTIONS =============================
 
 def Database():
     global conn, cursor
@@ -231,4 +227,4 @@ def Exit():
 
 # Ensure this function is only run when the script is executed directly
 if __name__ == '__main__':
-    start_application()
+    start_application(Tk())
