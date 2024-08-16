@@ -54,6 +54,48 @@ def Read():
     conn.close()
     txt_result.config(text="Successfully read the data from database", fg="black")
 
+def Update():
+    selected_item = tree.selection()
+    if not selected_item:
+        txt_result.config(text="Select a record to update!", fg="red")
+        return
+
+    if FIRSTNAME.get() == "" or LASTNAME.get() == "" or GENDER.get() == "" or ADDRESS.get() == "" or USERNAME.get() == "" or PASSWORD.get() == "":
+        txt_result.config(text="Please complete the required field!", fg="red")
+    else:
+        Database()
+        selected_data = tree.item(selected_item, 'values')
+        cursor.execute("UPDATE member SET firstname=%s, lastname=%s, gender=%s, address=%s, username=%s, password=%s WHERE firstname=%s AND lastname=%s",
+                       (FIRSTNAME.get(), LASTNAME.get(), GENDER.get(), ADDRESS.get(), USERNAME.get(), PASSWORD.get(), selected_data[0], selected_data[1]))
+        conn.commit()
+        FIRSTNAME.set("")
+        LASTNAME.set("")
+        GENDER.set("")
+        ADDRESS.set("")
+        USERNAME.set("")
+        PASSWORD.set("")
+        cursor.close()
+        conn.close()
+        txt_result.config(text="Record updated successfully!", fg="green")
+
+def Delete():
+    selected_item = tree.selection()
+    if not selected_item:
+        txt_result.config(text="Select a record to delete!", fg="red")
+        return
+
+    result = tkMessageBox.askquestion('Python: Simple CRUD Application', 'Are you sure you want to delete this record?', icon="warning")
+    if result == 'yes':
+        selected_data = tree.item(selected_item, 'values')
+        Database()
+        cursor.execute("DELETE FROM member WHERE firstname=%s AND lastname=%s",
+                       (selected_data[0], selected_data[1]))
+        conn.commit()
+        tree.delete(selected_item)
+        cursor.close()
+        conn.close()
+        txt_result.config(text="Record deleted successfully!", fg="green")
+
 def Exit():
     result = tkMessageBox.askquestion('Python: Simple CRUD Application', 'Are you sure you want to exit?', icon="warning")
     if result == 'yes':
@@ -119,9 +161,9 @@ btn_create = Button(Buttons, width=10, text="Create", command=Create)
 btn_create.pack(side=LEFT)
 btn_read = Button(Buttons, width=10, text="Read", command=Read)
 btn_read.pack(side=LEFT)
-btn_update = Button(Buttons, width=10, text="Update", state=DISABLED)
+btn_update = Button(Buttons, width=10, text="Update", command=Update)
 btn_update.pack(side=LEFT)
-btn_delete = Button(Buttons, width=10, text="Delete", state=DISABLED)
+btn_delete = Button(Buttons, width=10, text="Delete", command=Delete)
 btn_delete.pack(side=LEFT)
 btn_exit = Button(Buttons, width=10, text="Exit", command=Exit)
 btn_exit.pack(side=LEFT)
@@ -148,6 +190,20 @@ tree.column('#4', stretch=NO, minwidth=0, width=150)
 tree.column('#5', stretch=NO, minwidth=0, width=120)
 tree.column('#6', stretch=NO, minwidth=0, width=120)
 tree.pack()
+
+# Bind Treeview selection to populate fields
+def on_tree_select(event):
+    selected_item = tree.selection()
+    if selected_item:
+        values = tree.item(selected_item, 'values')
+        FIRSTNAME.set(values[0])
+        LASTNAME.set(values[1])
+        GENDER.set(values[2])
+        ADDRESS.set(values[3])
+        USERNAME.set(values[4])
+        PASSWORD.set(values[5])
+
+tree.bind('<<TreeviewSelect>>', on_tree_select)
 
 #==================================INITIALIZATION=====================================
 if __name__ == '__main__':
